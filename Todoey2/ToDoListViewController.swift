@@ -17,7 +17,7 @@ class TodoListViewController : UITableViewController {
         // Do any additional setup after loading the view.
     }
     
-    //MARK Create DataSource Methods :
+    //MARK Create TableView DataSource Methods :
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -35,7 +35,7 @@ class TodoListViewController : UITableViewController {
         
     }
     
-    //MARK Create Delegate Methods :
+    //MARK Create TableView Delegate Methods :
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -56,7 +56,37 @@ class TodoListViewController : UITableViewController {
     }
     
     
-
+    @IBAction func AddItemBtnPressed(_ sender: UIBarButtonItem) {
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add Todoey New Item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            
+            //MARK - What happens when Add Item is pressed
+            
+            self.itemArray.append(textField.text!)
+            
+            self.tableView.reloadData()
+            
+        }
+        
+        alert.addTextField { (alertTextfield) in
+            
+            alertTextfield.placeholder = "Create new item"
+            
+            textField = alertTextfield
+           
+            
+        }
+        
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+        
+    }
+    
 
 }
 
