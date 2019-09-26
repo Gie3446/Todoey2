@@ -10,7 +10,6 @@ import UIKit
 
 class TodoListViewController : UITableViewController {
     
-   // var itemArray = ["Go to the supermarket", "Make dinner", "Take shower", "Continue on Swift lessons", "Go to bed"]
     
     var itemArray = [Item]()
     
@@ -19,40 +18,8 @@ class TodoListViewController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
-        
-        
-        //print(dataFilePath)
-        
-        
-        let newItem = Item()
-        newItem.title = "Go"
-        itemArray.append(newItem)
-        
-        
-        let newItem2 = Item()
-        newItem2.title = "to"
-        itemArray.append(newItem2)
-        
-        
-        let newItem3 = Item()
-        newItem3.title = "Go to supermarket"
-        itemArray.append(newItem3)
-        
-        
-        let newItem4 = Item()
-        newItem4.title = "Go to supermarket"
-        itemArray.append(newItem4)
-        
-        
-        
-      //  if let items = defaults.array(forKey: "ToDoListArray") as? [Item] {
-      //  itemArray = items
-       // }
-        
-       
-        
+        loadItems()
         
     }
     
@@ -70,17 +37,6 @@ class TodoListViewController : UITableViewController {
         
         cell.textLabel?.text = items.title
         
-        
-        
-        
-//        if items.done == true {
-//
-//            cell.accessoryType = .checkmark
-//
-//        } else {
-//
-//            cell.accessoryType = .none
-//        }
         
         //Using Ternary Operator to set cell's accessory type
         
@@ -101,29 +57,6 @@ class TodoListViewController : UITableViewController {
     //MARK Create TableView Delegate Methods :
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        //print(itemArray[indexPath.row])
-        
-//        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-//
-//            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-//
-//        } else {
-//
-//            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-//
-//        }
-        
-//        if (itemArray[indexPath.row].done) == false {
-//
-//            itemArray[indexPath.row].done = true
-//        }
-//
-//        else {
-//
-//            itemArray[indexPath.row].done = false
-//        }
-        
        
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
@@ -146,7 +79,7 @@ class TodoListViewController : UITableViewController {
             
             //MARK - What happens when Add Item is pressed
             
-//            self.itemArray.append(textField.text!)
+
 
             let newItem = Item()
             
@@ -184,18 +117,38 @@ class TodoListViewController : UITableViewController {
         
         do {
             
-            let data = try encoder.encode(self.itemArray)
+        let data = try encoder.encode(itemArray)
             
-            try data.write(to: self.dataFilePath!)
-            
+            try data.write(to: dataFilePath!)
+        
         }
         catch {
             
-            print("Error encoding itemArray, \(error)")
-            
+            print("There is an error encoding itemArray, \(error)")
         }
         
         tableView.reloadData()
+        
+    }
+    
+    func loadItems() {
+        
+        if let data = try? Data(contentsOf: dataFilePath!){
+            
+            let decoder = PropertyListDecoder()
+           
+            do {
+                
+            itemArray = try decoder.decode([Item].self, from: data)
+                
+            }
+            
+            catch {
+                
+                print("Error decoding item array, \(error)")
+                
+            }
+        }
         
     }
 
